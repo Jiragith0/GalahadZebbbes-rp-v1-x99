@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ECM SHOPPING ONLINE</title>
+
+    <style>
+        body {
+            font-family: Calibri, Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 24px;
+        }
+
+        h1 {
+            margin-bottom: 24px;
+        }
+
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-card {
+            border-radius: 16px;
+            padding: 20px;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 18px rgba(0,0,0,0.15);
+        }
+
+        .kpi-title {
+            font-size: 16px;
+            margin-bottom: 12px;
+            opacity: 0.95;
+        }
+
+        .kpi-value {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .cost-card {
+            background-color: #10b981;
+        }
+
+        .po-card {
+            background-color: #3b82f6;
+        }
+
+        .item-card {
+            background-color: #f59e0b;
+        }
+
+        .vendor-card {
+            background-color: #8b5cf6;
+        }
+
+        .other-card {
+            background-color: #ef4444;
+        }
+
+        .filter-bar {
+            margin-bottom: 20px;
+        }
+
+        .filter-bar label,
+        .filter-bar select,
+        .filter-bar button {
+            font-size: 14px;
+            margin-right: 8px;
+        }
+
+        .filter-bar button {
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+
+        .chart-section {
+            margin-top: 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            align-items: start;
+        }
+
+        .chart-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+            width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .chart-card h2 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            font-size: 22px;
+        }
+        
+        .chart-card canvas {
+            height: 420px !important;
+        }
+
+        .selected-filter {
+            margin-top: 12px;
+            margin-bottom: 16px;
+            padding: 10px 16px;
+            background-color: #eef2ff;
+            border-left: 4px solid #1f2a7a;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #1f2a7a;
+            font-size: 14px;
+        }
+
+        #clearFilterBtn {
+            margin-top: 8px;
+            margin-bottom: 8px;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 8px;
+            background-color: #1f2a7a;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        #clearFilterBtn:hover {
+            opacity: 0.9;
+        }
+
+        .detail-section {
+            margin-top: 24px;
+        }
+
+        .detail-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+        }
+
+        .detail-card h2 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            font-size: 22px;
+        }
+
+        .table-search {
+            width: 100%;
+            max-width: 420px;
+            padding: 10px 12px;
+            margin-bottom: 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .table-search:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+
+        #itemDetailTable {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        #itemDetailTable th,
+        #itemDetailTable td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        #itemDetailTable th {
+            background-color: #f8fafc;
+            font-weight: 700;
+            color: #1f2937;
+
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        #itemDetailTable tbody tr:hover {
+            background-color: #f9fafb;
+        }
+
+        #itemDetailTable th:nth-child(4),
+        #itemDetailTable td:nth-child(4) {
+            min-width: 100px;
+            white-space: nowrap;
+            text-align: right;
+        }
+
+        #itemDetailTable th:nth-child(6),
+        #itemDetailTable td:nth-child(6) {
+            min-width: 100px;
+            white-space: nowrap;
+            text-align: left;
+        }
+
+        #itemDetailTable th:nth-child(7),
+        #itemDetailTable td:nth-child(7) {
+            min-width: 100px;
+            white-space: nowrap;
+            text-align: left;
+        }
+
+        #otherReviewTable {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        #otherReviewTable th,
+        #otherReviewTable td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        #otherReviewTable th {
+            background-color: #fef2f2;
+            font-weight: 700;
+            color: #991b1b;
+        
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        
+
+        #otherReviewTable tbody tr:hover {
+            background-color: #fff7ed;
+        }
+
+        #otherReviewTable th:nth-child(4),
+        #otherReviewTable td:nth-child(4) {
+            min-width: 100px;
+            white-space: nowrap;
+            text-align: right;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<h1>ECM SHOPPING ONLINE</h1>
+
+<div class="kpi-container">
+    <div class="kpi-card cost-card">
+        <div class="kpi-title">TOTAL COST (THB)</div>
+        <div class="kpi-value" id="totalCost">0</div>
+    </div>
+
+    <div class="kpi-card po-card">
+        <div class="kpi-title">TOTAL PO</div>
+        <div class="kpi-value" id="totalPO">0</div>
+    </div>
+
+    <div class="kpi-card item-card">
+        <div class="kpi-title">TOTAL ITEM</div>
+        <div class="kpi-value" id="totalItem">0</div>
+    </div>
+
+    <div class="kpi-card vendor-card">
+        <div class="kpi-title">TOTAL VENDOR</div>
+        <div class="kpi-value" id="totalVendor">0</div>
+    </div>
+
+    <div class="kpi-card other-card">
+        <div class="kpi-title">OTHER %</div>
+        <div class="kpi-value" id="otherPercent">0%</div>
+    </div>
+</div>  
+
+<div class="filter-bar">
+
+    <label for="yearSelect">Year:</label>
+    <select id="yearSelect" onchange="loadData()">
+        <option value="2026">2026</option>
+        <option value="2025">2025</option>
+        <option value="2024">2024</option>
+    </select>
+
+    <label for="quarterSelect" style="margin-left: 16px;">Quarter:</label>
+    <select id="quarterSelect" onchange="loadData()"> 
+        <option value="ALL">All</option>
+        <option value="Q1">Q1</option>
+        <option value="Q2">Q2</option>
+        <option value="Q3">Q3</option>
+        <option value="Q4">Q4</option>
+    </select>
+
+</div>
+
+<div id="selectedFilterText" class="selected-filter">
+    Selected: All Data
+</div>
+
+<button id="clearFilterBtn" onclick="clearAllSelections()">Clear Filters</button>
+
+<div class="chart-section">
+    <div class="chart-card">
+        <h2>TOP VENDORS BY PURCHASE VALUE</h2>
+        <canvas id="topVendorChart"></canvas>
+    </div>
+
+    <div class="chart-card">
+        <h2>TOP COMPANIES BY PURCHASE VALUE</h2>
+        <canvas id="topCompanyChart"></canvas>
+    </div>
+
+    <div class="chart-card">
+        <h2>PO SIZE DISTRIBUTION</h2>
+        <canvas id="poSizeChart"></canvas>
+    </div>
+
+    <div class="chart-card">
+        <h2>TOP REQUESTED ITEMS</h2>
+        <canvas id="topItemsChart"></canvas>
+    </div>
+</div>
+
+<div class="detail-section">
+    <div class="detail-card">
+        <h2>ECM ITEM DETAIL</h2>
+        <input
+            type="text"
+            id="itemDetailSearch"
+            placeholder="Search Supplier, doccode, Detail, Company"
+            oninput="refreshDashboard()"
+            class="table-search"
+        />
+        <div class="table-container">
+            <table id="itemDetailTable">
+                <thead>
+                    <tr>
+                        <th>SUPPLIER</th>
+                        <th>DOCCODE</th>
+                        <th>DETAIL</th>
+                        <th>TOTAL (THB)</th>
+                        <th>COMPANY</th>
+                        <th>ITEM GROUP</th>
+                        <th>CATEGORY</th>
+                    </tr>
+                </thead>
+                <tbody id="itemDetailTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="detail-section">
+    <div class="detail-card">
+        <h2>OTHER REVIEW LIST</h2>
+        <input
+            type="text"
+            id="otherReviewSearch"
+            placeholder="Search Supplier, doccode, Detail, Company"
+            oninput="refreshDashboard()"
+            class="table-search"
+        />
+        <div class="table-container">
+            <table id="otherReviewTable">
+                <thead>
+                    <tr>
+                        <th>SUPPLIER</th>
+                        <th>DOCCODE</th>
+                        <th>DETAIL</th>
+                        <th>TOTAL (THB)</th>
+                        <th>COMPANY</th>
+                        <th>ITEM GROUP</th>
+                        <th>CATEGORY</th>
+                    </tr>
+                </thead>
+                <tbody id="otherReviewTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+<script>
+
+function parseDatepay(dateStr) {
+    const parts = dateStr.split("/")
+
+    if (parts.length !== 3) return null
+
+    const day = Number(parts[0])
+    const month = Number(parts[1]) - 1
+    const year = Number(parts[2])
+
+    return new Date(year, month, day)
+}
+
+function truncateLabel(text, maxLength = 18) {
+    if (!text) return "Unknown"
+    return text.length > maxLength ? text.slice(0, maxLength) + "..." : text
+}
+
+function cleanVendorName(name) {
+    const text = (name || "").trim().toLowerCase().replace(/\s+/g, " ")
+
+    return text.replace(/\b\w/g, char => char.toUpperCase())
+}
+
+let topVendorChartInstance = null
+let topCompanyChartInstance = null
+let poSizeChartInstance = null
+let topItemsChartInstance = null
+
+let selectedVendor = null
+let selectedCompany = null
+let selectedPOBucket = null
+let selectedItemGroup = null
+
+let currentFilteredList = []
+
+async function loadData(){
+    try {
+
+        const year = document.getElementById("yearSelect").value
+        const quarter = document.getElementById("quarterSelect").value
+
+        let startdate = ""
+        let enddate = ""
+
+        if (quarter === "ALL") {
+            startdate = `${year}-01-01`
+            enddate = `${Number(year) + 1}-01-01`
+        } else if (quarter === "Q1") {
+            startdate = `${year}-01-01`
+            enddate = `${year}-04-01`
+        } else if (quarter === "Q2") {
+            startdate = `${year}-04-01`
+            enddate = `${year}-07-01`
+        } else if (quarter === "Q3") {
+            startdate = `${year}-07-01`
+            enddate = `${year}-10-01`
+        } else if (quarter === "Q4") {
+            startdate = `${year}-10-01`
+            enddate = `${Number(year) + 1}-01-01`
+        }
+
+
+        const url = `https://api-ecm.advanceagro.net/ecm/reportregister?id=0&startdate=${startdate}&enddate=${enddate}`
+
+        const response = await fetch(url)
+        const data = await response.json()
+        const list = data.data.list
+
+        const startDate = new Date(startdate)
+        const endDate = new Date(enddate)
+
+        currentFilteredList = list.filter(item => {
+            if (!item.Datepay || item.Datepay.trim() === "") return false
+
+            const payDate = parseDatepay(item.Datepay)
+            if (!payDate || isNaN(payDate.getTime())) return false
+
+            return payDate >= startDate && payDate < endDate
+        })
+
+        selectedVendor = null
+        selectedCompany = null
+        selectedPOBucket = null
+        selectedItemGroup = null
+
+        refreshDashboard()
+    
+    } catch (error) {
+        console.error("API ERROR:", error)
+        alert("Failed to load data")
+    }
+}
+
+function updateKPIFromList(dataList) {
+        let totalCost = 0
+        let totalItem = dataList.length
+
+        let doccodeSet = new Set()
+        let vendorSet = new Set()
+
+        let otherCount = 0
+
+        for (let item of dataList) {
+            totalCost += Number(item.Total || 0)
+
+            doccodeSet.add(item.doccode)
+            vendorSet.add(cleanVendorName(item.Supplier || ""))
+
+            const itemGroup = normalizeItemGroup(item.Name, item.Detail)
+            if (itemGroup === "Other") {
+                otherCount += 1
+            }
+        }
+
+        document.getElementById("totalCost").innerText = Math.round(totalCost).toLocaleString()
+        document.getElementById("totalPO").innerText = doccodeSet.size.toLocaleString()
+        document.getElementById("totalItem").innerText = totalItem.toLocaleString()
+        document.getElementById("totalVendor").innerText = vendorSet.size.toLocaleString()
+
+        const otherPercent = totalItem === 0 ? 0 : (otherCount / totalItem) * 100
+        document.getElementById("otherPercent").innerText = `${otherPercent.toFixed(1)}%`
+
+        return totalCost
+}
+
+function buildTopChartData(dataList, fieldName, topN = 10) {
+    let totals = {}
+
+    for (let item of dataList) {
+        let key = item[fieldName] ? item[fieldName].trim() : "Unknown"
+
+        if (fieldName === "Supplier") {
+            key = cleanVendorName(key)
+        }
+
+        const amount = Number(item.Total || 0)
+
+        if (!totals[key]) {
+            totals[key] = 0
+        }
+
+        totals[key] += amount
+    }
+
+    let arr = Object.entries(totals).map(([name, total]) => ({
+        name,
+        total
+    }))
+
+    arr.sort((a, b) => b.total - a.total)
+
+    return arr.slice(0, topN)
+}
+
+function getPOBucket(total) {
+    const value = Number(total || 0)
+
+    if (value < 5000) return "0-5k"
+    if (value < 10000) return "5k-10k"
+    if (value < 20000) return "10k-20k"
+    if (value <= 50000) return "20k-50k"
+    return ">50k"
+}
+
+function buildPOSizeData(dataList) {
+    const bucketOrder = ["0-5k", "5k-10k", "10k-20k", "20k-50k", ">50k"]
+
+    let bucketCounts = {
+        "0-5k": 0,
+        "5k-10k": 0,
+        "10k-20k": 0,
+        "20k-50k": 0,
+        ">50k": 0
+    }
+
+    for (let item of dataList) {
+        const bucket = getPOBucket(item.Total)
+        bucketCounts[bucket] += 1
+    }
+
+    return {
+        labels: bucketOrder,
+        counts: bucketOrder.map(bucket => bucketCounts[bucket])
+    }
+}
+
+function normalizeItemGroup(name, detail) {
+    const itemText = `${name || ""} ${detail || ""}`.toLowerCase().trim()
+
+    if (/สว่าน|drill/.test(itemText)) return "Drill"
+    if (/ถุงมือ|glove/.test(itemText)) return "Glove"
+    if (/สายไฟ|cable|wire/.test(itemText)) return "Cable / Wire"
+    if (/สี|paint/.test(itemText)) return "Paint"
+    if (/น็อต|bolt|screw/.test(itemText)) return "Screw / Bolt"
+    if (/คีม|pliers/.test(itemText)) return "Pliers"
+    if (/ไขควง|screwdriver/.test(itemText)) return "Screwdriver"
+    if (/รองเท้า|shoe|safety/.test(itemText)) return "Safety / Shoes"
+    if (/หลอดไฟ|lamp|light/.test(itemText)) return "Lighting"
+    if (/เทป|tape/.test(itemText)) return "Tape"
+    if (/เครื่องมือ|tool/.test(itemText)) return "Tools"
+
+    return "Other"
+}
+
+function mapItemGroupToCategory(itemGroup) {
+    if (["Drill", "Pliers", "Screwdriver", "Tools", "Screw / Bolt"].includes(itemGroup)) {
+        return "Tools & Equipment"
+    }
+
+    if (["Glove", "Safety / Shoes"].includes(itemGroup)) {
+        return "Safety & PPE"
+    }
+
+    if (["Cable / Wire", "Lighting"].includes(itemGroup)) {
+        return "Electrical & Cable"
+    }
+
+    if (["Paint", "Tape"].includes(itemGroup)) {
+        return "Maintenance Materials"
+    }
+
+    return "Other"
+}
+
+function buildTopItemsData(dataList, topN = 10) {
+    let totals = {}
+
+    for (let item of dataList) {
+        const group = normalizeItemGroup(item.Name, item.Detail)
+        const amount = Number(item.Total || 0)
+
+        if (!totals[group]) {
+            totals[group] = 0
+        }
+
+        totals[group] += amount
+    }
+
+    let arr = Object.entries(totals).map(([name, total]) => ({
+        name,
+        total
+    }))
+
+    arr.sort((a, b) => b.total - a.total)
+
+    return arr.slice(0, topN)
+}
+
+
+function updateSelectedFilterText() {
+    let parts = []
+
+    if (selectedVendor) {
+        parts.push(`Vendor = ${selectedVendor}`)
+    }
+
+    if (selectedCompany) {
+        parts.push(`Company = ${selectedCompany}`)
+    }
+
+    if (selectedPOBucket) {
+        parts.push(`PO Size = ${selectedPOBucket}`)
+    }
+
+    if (selectedItemGroup) {
+        parts.push(`Item Group = ${selectedItemGroup}`)
+    }
+
+    if (parts.length === 0) {
+        document.getElementById("selectedFilterText").innerText = "Selected: All Data"
+    } else {
+        document.getElementById("selectedFilterText").innerText = "Selected: " + parts.join(" | ")
+    }
+}
+
+function clearAllSelections() {
+    selectedVendor = null
+    selectedCompany = null
+    selectedPOBucket = null
+    selectedItemGroup = null
+    refreshDashboard()
+}
+
+function matchesSearch(item, searchText) {
+    const keyword = (searchText || "").trim().toLowerCase()
+
+    if (!keyword) return true
+
+    const supplier = cleanVendorName(item.Supplier || "").toLowerCase()
+    const doccode = (item.doccode || "").toLowerCase()
+    const detail = (item.Detail || "").toLowerCase()
+    const company = (item.Company || "").toLowerCase()
+
+    const combinedText = `${supplier} ${doccode} ${detail} ${company}`
+
+    return combinedText.includes(keyword)
+}
+
+function refreshDashboard() {
+    updateSelectedFilterText()
+    
+    const dashboardList = currentFilteredList.filter(item => {
+        const matchVendor = !selectedVendor || cleanVendorName(item.Supplier || "") === selectedVendor
+        const matchCompany = !selectedCompany || item.Company === selectedCompany
+        const matchPOBucket = !selectedPOBucket || getPOBucket(item.Total) === selectedPOBucket
+        const matchItemGroup = !selectedItemGroup || normalizeItemGroup(item.Name, item.Detail) === selectedItemGroup
+
+        return matchVendor && matchCompany && matchPOBucket && matchItemGroup
+    })
+
+    const totalCost = updateKPIFromList(dashboardList)
+    
+    const vendorChartList = currentFilteredList.filter(item => {
+        const matchCompany = !selectedCompany || item.Company === selectedCompany
+        const matchPOBucket = !selectedPOBucket || getPOBucket(item.Total) === selectedPOBucket
+        const matchItemGroup = !selectedItemGroup || normalizeItemGroup(item.Name, item.Detail) === selectedItemGroup
+        
+        return matchCompany && matchPOBucket && matchItemGroup
+    })
+
+    const vendorTop = buildTopChartData(vendorChartList, "Supplier", 10)
+    const vendorFullNames = vendorTop.map(v => v.name)
+    const vendorLabels = vendorTop.map(v => truncateLabel(v.name, 18))
+    const vendorAmounts = vendorTop.map(v => v.total)
+
+    const vendorChartTotal = vendorChartList.reduce((sum, item) => {
+        return sum + Number(item.Total || 0)
+    }, 0)
+
+    const vendorPercents = vendorTop.map(v =>
+        vendorChartTotal === 0 ? 0 : (v.total / vendorChartTotal) * 100
+    )
+
+    renderTopVendorChart(vendorLabels, vendorAmounts, vendorPercents, vendorChartTotal, vendorFullNames)
+
+    const companyChartList = currentFilteredList.filter(item => {
+        const matchVendor = !selectedVendor || cleanVendorName(item.Supplier || "") === selectedVendor
+        const matchPOBucket = !selectedPOBucket || getPOBucket(item.Total) === selectedPOBucket
+        const matchItemGroup = !selectedItemGroup || normalizeItemGroup(item.Name, item.Detail) === selectedItemGroup
+
+        return matchVendor && matchPOBucket && matchItemGroup
+    })
+
+    const companyTop = buildTopChartData(companyChartList, "Company", 10)
+    const companyFullNames = companyTop.map(v => v.name)
+    const companyLabels = companyTop.map(v => truncateLabel(v.name, 18))
+    const companyAmounts = companyTop.map(v => v.total)
+
+    const companyChartTotal = companyChartList.reduce((sum, item) => {
+        return sum + Number(item.Total || 0)
+    }, 0)
+
+    const companyPercents = companyTop.map(v =>
+        companyChartTotal === 0 ? 0 : (v.total / companyChartTotal) * 100
+    )
+
+    renderTopCompanyChart(companyLabels, companyAmounts, companyPercents, companyChartTotal, companyFullNames)
+
+    const poSizeData = buildPOSizeData(dashboardList)
+    renderPOSizeChart(poSizeData.labels, poSizeData.counts)
+
+    const itemChartList = currentFilteredList.filter(item => {
+        const matchVendor = !selectedVendor || cleanVendorName(item.Supplier || "") === selectedVendor
+        const matchCompany = !selectedCompany || item.Company === selectedCompany
+        const matchPOBucket = !selectedPOBucket || getPOBucket(item.Total) === selectedPOBucket
+
+        return matchVendor && matchCompany && matchPOBucket
+    })
+
+    const itemTop = buildTopItemsData(itemChartList, 10)
+    const itemFullNames = itemTop.map(v => v.name)
+    const itemLabels = itemTop.map(v => truncateLabel(v.name, 18))
+    const itemAmounts = itemTop.map(v => v.total)
+
+    const itemChartTotal = itemChartList.reduce((sum, item) => {
+        return sum + Number(item.Total || 0)
+    }, 0)
+
+    const itemPercents = itemTop.map(v =>
+        itemChartTotal === 0 ? 0 : (v.total / itemChartTotal) * 100
+    )
+
+    renderTopItemsChart(itemLabels, itemAmounts, itemPercents, itemChartTotal, itemFullNames)
+    renderECMItemDetailTable(dashboardList)
+    renderOtherReviewTable(dashboardList)
+
+}
+
+function renderTopVendorChart(labels, amounts, percents, totalCost, fullNames) {
+    const ctx = document.getElementById("topVendorChart").getContext("2d")
+
+    if (topVendorChartInstance) {
+        topVendorChartInstance.destroy()
+    }
+
+    topVendorChartInstance = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "Total Cost",
+                    data: amounts,
+                    backgroundColor: labels.map((_, index) => {
+                        if (selectedVendor) {
+                            return fullNames[index] === selectedVendor ? "#f97316" : "#dbeafe"
+                        }
+                        return "#1f2a7a"
+                    }),
+                    borderColor: labels.map((_, index) => {
+                        if (selectedVendor) {
+                            return fullNames[index] === selectedVendor ? "#ea580c" : "#dbeafe"
+                        }
+                        return "#1f2a7a"
+                    }),
+                    borderWidth: labels.map((_, index) => {
+                        return selectedVendor && fullNames[index] === selectedVendor ? 3 : 0
+                    }),
+                    borderRadius: labels.map((_, index) => {
+                        return selectedVendor && fullNames[index] === selectedVendor ? 8 : 4
+                    }),
+                    barThickness: 36
+                }
+            ]
+        },
+        options: {
+            indexAxis: "y",
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: {
+                duration: 700,
+                easing: "easeOutQuart"
+            },
+            layout: {
+                padding: {
+                    right: 100
+                }
+            },
+            onClick: function(evt, elements) {
+                if (elements.length > 0) {
+                    const index = elements[0].index
+                    const vendorName = fullNames[index]
+
+                    selectedVendor = selectedVendor === vendorName ? null : vendorName
+                    refreshDashboard()
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        title: function(context) {
+                            const index = context[0].dataIndex
+                            return fullNames[index]
+                        },
+                        label: function(context) {
+                            const value = Number(context.raw)
+                            const percent = totalCost === 0 ? 0 : (value / totalCost) * 100
+                            return `${value.toLocaleString()} THB (${percent.toFixed(1)}%)`
+                        }
+                    }
+                },
+                datalabels: {
+                    anchor: "end",
+                    align: "right",
+                    offset: 8,
+                    clamp: true,
+                    clip: false,
+                    color: "#03082b",
+                    font: {
+                        weight: "bold",
+                        size: 12
+                    },
+                    formatter: function(value) {
+                        const percent = totalCost === 0 ? 0 : (value / totalCost) * 100
+
+                        let amountText = ""
+                        if (value >= 1000000) {
+                            amountText = (value / 1000000).toFixed(1).replace(".0", "") + "M"
+                        } else if (value >= 1000) {
+                            amountText = (value / 1000).toFixed(0) + "K"
+                        } else {
+                            amountText = value.toFixed(0)
+                        }
+
+                        return `${amountText} (${percent.toFixed(1)}%)`
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    display: false,
+                    grid: {
+                        display: false,
+                        drawBorder: false
+                    },
+                    border: {
+                        display: false
+                    }
+                },
+                y: {
+                    title: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 13
+                        }
+                    },
+                    grid: {
+                        display: false,
+                        drawBorder: false
+                    },
+                    border: {
+                        display: false
+                    }
+                }
+            }
+        },
+        plugins: [ChartDataLabels]
+    })
+}
+
+function renderTopCompanyChart(labels, amounts, percents, totalCost, fullNames) {
+    const ctx = document.getElementById("topCompanyChart").getContext("2d")
+
+    if (topCompanyChartInstance) {
+        topCompanyChartInstance.destroy()
+    }
+
+    topCompanyChartInstance = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "Total Cost",
+                    data: amounts,
+                    backgroundColor: labels.map((_, index) => {
+                        if (selectedCompany) {
+                            return fullNames[index] === selectedCompany ? "#f97316" : "#dcfce7"
+                        }
+                        return "#0f766e"
+                    }),
+                    borderColor: labels.map((_, index) => {
+                        if (selectedCompany) {
+                            return fullNames[index] === selectedCompany ? "#ea580c" : "#dcfce7"
+                        }
+                        return "#0f766e"
+                    }),
+                    borderWidth: labels.map((_, index) => {
+                        return selectedCompany && fullNames[index] === selectedCompany ? 3 : 0
+                    }),
+                    borderRadius: labels.map((_, index) => {
+                        return selectedCompany && fullNames[index] === selectedCompany ? 8 : 4
+                    }),
+                    barThickness: 36
+                }
+            ]
+        },
+        options: {
+            indexAxis: "y",
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: {
+                duration: 700,
+                easing: "easeOutQuart"
+            },
+            layout: {
+                padding: {
+                    right: 100
+                }
+            },
+            onClick: function(evt, elements) {
+                if (elements.length > 0) {
+                    const index = elements[0].index
+                    const companyName = fullNames[index]
+
+                    selectedCompany = selectedCompany === companyName ? null : companyName
+                    refreshDashboard()
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        title: function(context) {
+                            const index = context[0].dataIndex
+                            return fullNames[index]
+                        },
+                        label: function(context) {
+                            const value = Number(context.raw)
+                            const percent = totalCost === 0 ? 0 : (value / totalCost) * 100
+                            return `${value.toLocaleString()} THB (${percent.toFixed(1)}%)`
+                        }
+                    }
+                },
+                datalabels: {
+                    anchor: "end",
+                    align: "right",
+                    offset: 8,
+                    clamp: true,
+                    clip: false,
+                    color: "#0f766e",
+                    font: {
+                        weight: "bold",
+                        size: 12
+                    },
+                    formatter: function(value) {
+                        const percent = totalCost === 0 ? 0 : (value / totalCost) * 100
+
+                        let amountText = ""
+                        if (value >= 1000000) {
+                            amountText = (value / 1000000).toFixed(1).replace(".0", "") + "M"
+                        } else if (value >= 1000) {
+                            amountText = (value / 1000).toFixed(0) + "K"
+                        } else {
+                            amountText = value.toFixed(0)
+                        }
+
+                        return `${amountText} (${percent.toFixed(1)}%)`
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    display: false,
+                    grid: {
+                        display: false,
+                        drawBorder: false
+                    },
+                    border: {
+                        display: false
+                    }
+                },
+                y: {
+                    title: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 13
+                        }
+                    },
+                    grid: {
+                        display: false,
+                        drawBorder: false
+                    },
+                    border: {
+                        display: false
+                    }
+                }
+            }
+        },
+        plugins: [ChartDataLabels]
+    })
+}
+
+function renderPOSizeChart(labels, counts) {
+    const ctx = document.getElementById("poSizeChart").getContext("2d")
+
+    if (poSizeChartInstance) {
+        poSizeChartInstance.destroy()
+    }
+
+    poSizeChartInstance = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "Number of Items",
+                    data: counts,
+                    backgroundColor: labels.map(label => {
+                        if (selectedPOBucket) {
+                            if (label === selectedPOBucket) {
+                                return label === ">50k" ? "#dc2626" : "#2563eb"
+                            }
+                            return label === ">50k" ? "#fecaca" : "#dbeafe"
+                        }
+                        return label === ">50k" ? "#dc2626" : "#2563eb"
+                    }),
+                    borderColor: labels.map(label => {
+                        if (selectedPOBucket) {
+                            if (label === selectedPOBucket) {
+                                return label === ">50k" ? "#b91c1c" : "#1d4ed8"
+                            }
+                            return label === ">50k" ? "#fecaca" : "#dbeafe"
+                        }
+                        return label === ">50k" ? "#b91c1c" : "#1d4ed8"
+                    }),
+                    borderWidth: labels.map(label => {
+                        return selectedPOBucket === label ? 3 : 0
+                    }),
+                    borderRadius: 8
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: {
+                duration: 700,
+                easing: "easeOutQuart"
+            },
+            onClick: function(evt, elements) {
+                if (elements.length > 0) {
+                    const index = elements[0].index
+                    const bucket = labels[index]
+
+                    selectedPOBucket = selectedPOBucket === bucket ? null : bucket
+                    refreshDashboard()
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.raw.toLocaleString()} items`
+                        }
+                    }
+                },
+                datalabels: {
+                    anchor: "end",
+                    align: "top",
+                    clamp: true,
+                    clip: false,
+                    color: "#2563eb",
+                    font: {
+                        weight: "bold",
+                        size: 10
+                    },
+                    formatter: function(value) {
+                        return value.toLocaleString()
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 13
+                        }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    grace: "15%",
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        precision: 0,
+                        font: {
+                            size: 13
+                        }
+                    }
+                }
+            }
+        },
+        plugins: [ChartDataLabels]
+    })
+}
+
+function renderTopItemsChart(labels, amounts, percents, chartTotal, fullNames) {
+    const ctx = document.getElementById("topItemsChart").getContext("2d")
+
+    if (topItemsChartInstance) {
+        topItemsChartInstance.destroy()
+    }
+
+    topItemsChartInstance = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "Total Cost",
+                    data: amounts,
+                    backgroundColor: labels.map((_, index) => {
+                        if (selectedItemGroup) {
+                            return fullNames[index] === selectedItemGroup ? "#f97316" : "#ede9fe"
+                        }
+                        return "#7c3aed"
+                    }),
+                    borderColor: labels.map((_, index) => {
+                        if (selectedItemGroup) {
+                            return fullNames[index] === selectedItemGroup ? "#ea580c" : "#ede9fe"
+                        }
+                        return "#7c3aed"
+                    }),
+                    borderWidth: labels.map((_, index) => {
+                        return selectedItemGroup && fullNames[index] === selectedItemGroup ? 3 : 0
+                    }),
+                    borderRadius: 8,
+                    barThickness: 36
+                }
+            ]
+        },
+        options: {
+            indexAxis: "y",
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: {
+                duration: 700,
+                easing: "easeOutQuart"
+            },
+            layout: {
+                padding: {
+                    right: 100
+                }
+            },
+            onClick: function(evt, elements) {
+                if (elements.length > 0) {
+                    const index = elements[0].index
+                    const itemGroup = fullNames[index]
+
+                    selectedItemGroup = selectedItemGroup === itemGroup ? null : itemGroup
+                    refreshDashboard()
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        title: function(context) {
+                            const index = context[0].dataIndex
+                            return fullNames[index]
+                        },
+                        label: function(context) {
+                            const value = Number(context.raw)
+                            const percent = chartTotal === 0 ? 0 : (value / chartTotal) * 100
+                            return `${value.toLocaleString()} THB (${percent.toFixed(1)}%)`
+                        }
+                    }
+                },
+                datalabels: {
+                    anchor: "end",
+                    align: "right",
+                    offset: 8,
+                    clamp: true,
+                    clip: false,
+                    color: "#7c3aed",
+                    font: {
+                        weight: "bold",
+                        size: 12
+                    },
+                    formatter: function(value) {
+                        const percent = chartTotal === 0 ? 0 : (value / chartTotal) * 100
+
+                        let amountText = ""
+                        if (value >= 1000000) {
+                            amountText = (value / 1000000).toFixed(1).replace(".0", "") + "M"
+                        } else if (value >= 1000) {
+                            amountText = (value / 1000).toFixed(0) + "K"
+                        } else {
+                            amountText = value.toFixed(0)
+                        }
+
+                        return `${amountText} (${percent.toFixed(1)}%)`
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    display: false,
+                    grid: {
+                        display: false,
+                        drawBorder: false
+                    },
+                    border: {
+                        display: false
+                    }
+                },
+                y: {
+                    title: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 13
+                        }
+                    },
+                    grid: {
+                        display: false,
+                        drawBorder: false
+                    },
+                    border: {
+                        display: false
+                    }
+                }
+            }
+        },
+        plugins: [ChartDataLabels]
+    })
+}
+
+function renderECMItemDetailTable(dataList) {
+    const tbody = document.getElementById("itemDetailTableBody")
+    const searchText = document.getElementById("itemDetailSearch").value
+
+    tbody.innerHTML = ""
+
+    const rowsToShow = dataList.filter(item => matchesSearch(item, searchText))
+
+    for (let item of rowsToShow) {
+        const itemGroup = normalizeItemGroup(item.Name, item.Detail)
+        const category = mapItemGroupToCategory(itemGroup)
+        const supplierName = cleanVendorName(item.Supplier || "")
+
+        const row = document.createElement("tr")
+
+        row.innerHTML = `
+            <td>${supplierName}</td>
+            <td>${item.doccode || ""}</td>
+            <td>${item.Detail || ""}</td>
+            <td>${Math.round(Number(item.Total || 0)).toLocaleString()}</td>
+            <td>${item.Company || ""}</td>
+            <td>${itemGroup}</td>
+            <td>${category}</td>
+        `
+
+        tbody.appendChild(row)
+    }
+}
+
+function renderOtherReviewTable(dataList) {
+    const tbody = document.getElementById("otherReviewTableBody")
+    const searchText = document.getElementById("otherReviewSearch").value
+
+    tbody.innerHTML = ""
+
+    const otherList = dataList.filter(item => {
+        const isOther = normalizeItemGroup(item.Name, item.Detail) === "Other"
+        const matchSearch = matchesSearch(item, searchText)
+
+        return isOther && matchSearch
+    })
+
+    for (let item of otherList) {
+        const itemGroup = normalizeItemGroup(item.Name, item.Detail)
+        const category = mapItemGroupToCategory(itemGroup)
+        const supplierName = cleanVendorName(item.Supplier || "")
+
+        const row = document.createElement("tr")
+
+        row.innerHTML = `
+            <td>${supplierName}</td>
+            <td>${item.doccode || ""}</td>
+            <td>${item.Detail || ""}</td>
+            <td>${Math.round(Number(item.Total || 0)).toLocaleString()}</td>
+            <td>${item.Company || ""}</td>
+            <td>${itemGroup}</td>
+            <td>${category}</td>
+        `
+
+        tbody.appendChild(row)
+    }
+}
+
+
+window.onload = loadData
+
+</script>
+
+</body>
+</html>
